@@ -6,7 +6,7 @@
 #define SWIMMERS_NUMBER 6
 #define DISTANCE 100
 
-#define DEBUG
+//#define DEBUG
 
 bool compare(float value, float reference, float epsilon) { return (value >= reference-epsilon)&&(value <= reference+epsilon); }
 
@@ -46,9 +46,9 @@ public:
             secondsPassed++;
             distancePassed = speed * (float)secondsPassed;
             //distancePassed = speed * ++secondsPassed;
-            if(distancePassed < DISTANCE || !compare(distancePassed, DISTANCE, 0.01))
+            if(distancePassed > DISTANCE || compare(distancePassed, DISTANCE, 0.01)) break;
+            else
                 std::cout << "Sec " << secondsPassed << ": swimmer N " << number << ' ' << name << " has swam " << distancePassed << " meters." << std::endl;
-            else break;
         }
         result = DISTANCE / speed;
     }
@@ -79,7 +79,7 @@ int main()
 {
     Swimmer* SWMarr[SWIMMERS_NUMBER];
     std::thread THRarr[SWIMMERS_NUMBER];
-    for(int i = 0; i < SWIMMERS_NUMBER; i++) new Swimmer(i);
+    for(int i = 0; i < SWIMMERS_NUMBER; i++) SWMarr[i] = new Swimmer(i);
 #ifdef DEBUG
     std::cout<< "DEBUG: constuctors OK\n";
     for(int i = 0; i < SWIMMERS_NUMBER; i++) std::cout<< " Swimmer N" << SWMarr[i]->getNumber() << ", " << SWMarr[i]->getName() << ".\n";
