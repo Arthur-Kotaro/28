@@ -1,0 +1,126 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"childIndexes" : 
+					[
+						1,
+						2,
+						3
+					],
+					"jsonFile" : "directory-.-d0094a50bb2071803777.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.30"
+					},
+					"projectIndex" : 0,
+					"source" : "."
+				},
+				{
+					"build" : "1",
+					"jsonFile" : "directory-1-e6da00f5af19ca69ac9e.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.30"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "1",
+					"targetIndexes" : 
+					[
+						0
+					]
+				},
+				{
+					"build" : "2",
+					"jsonFile" : "directory-2-c59b3ddc43b5d3e1d441.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.30"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "2",
+					"targetIndexes" : 
+					[
+						1
+					]
+				},
+				{
+					"build" : "3",
+					"jsonFile" : "directory-3-63b2585d63131428f00b.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.30"
+					},
+					"parentIndex" : 0,
+					"projectIndex" : 0,
+					"source" : "3",
+					"targetIndexes" : 
+					[
+						2
+					]
+				}
+			],
+			"name" : "",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3
+					],
+					"name" : "28",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 1,
+					"id" : "main1::@67b176705b4620661421",
+					"jsonFile" : "target-main1-3eb285de0b2e505dd408.json",
+					"name" : "main1",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 2,
+					"id" : "main2::@b1b1bd1ed240b1496c81",
+					"jsonFile" : "target-main2-2a28934cefe2d6f7ff39.json",
+					"name" : "main2",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 3,
+					"id" : "main3::@1bf0b26eb2090599dd68",
+					"jsonFile" : "target-main3-b1a81f082e3e6c87af50.json",
+					"name" : "main3",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "F:/Code/skillbox/28/cmake-build-28",
+		"source" : "F:/Code/skillbox/28"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 7
+	}
+}
