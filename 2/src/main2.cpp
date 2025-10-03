@@ -1,45 +1,76 @@
-#include <chrono>
 #include <iostream>
 #include <thread>
+#include <chrono>
+#include <mutex>
+#include <random>
+#include <main2.hpp>
 #include <string>
 
-#define SWIMMERS_NUMBER 6
-#define DISTANCE 100
+#define TRAINS_NUMBER 3
+#define DEBUG
 
+std::mutex IOControl;
 
-struct Swimmer { std::string name; float speed; float result; };
-
-bool compare(float value, float reference, float epsilon) { return (value >= reference-epsilon)&&(value <= reference+epsilon); }
-
-void swimTracker(const int num, const std::string &name, const float speed)
+Station::Station()
 {
-    float distancePassed = 0;
-    unsigned int secondsPassed = 0;
-    while(true)
-    {
-        std::this_thread::sleep_for(std::chrono::seconds(1));
-        distancePassed = speed * ++secondsPassed;
-        if(!compare(distancePassed, DISTANCE, 0.01))
-            std::cout << "Sec " << secondsPassed << ": swimmer N " << num << ' ' << name << " has swam " << distancePassed << " meters." << std::endl;
-        else break;
+    trainOccupant = nullptr;
+    stationAccess.unlock();
+    std::cout << "Station is available.\n";
+}
+
+void Station::StationOccupy(Train* InTrainOccupant)
+{
+    stationAccess.lock();
+    trainOccupant = InTrainOccupant;
+    std::string input;
+    IOControl.lock();
+    std::cout << "Train " << trainOccupant->getTrainLetter() << " arrived on station.\n";
+    do {
+        std::cout << "If you are ready to depart the train " << trainOccupant->getTrainLetter() << " enter \"depart\" : ";
+        std::cin >> input;
     }
-    return;
+    while(input != "depart");
+    std::cout << "Train " << trainOccupant->getTrainLetter() << " departed.\n";
+    IOControl.unlock();
+    trainOccupant = nullptr;
+    stationAccess.unlock();
 }
 
 
+Train::Train(int index)
+{
+    trainID = char('A' + index);
+    std::cout << "Enter travel time of train " << trainID << ": ";
+    std::cin >> travelTime;
+    startMotionDelay = std::rand() % 6 + 1;
+}
+
+void Train::trainMovement(Station *InTrainstation)
+{
+    std::this_thread::sleep_for(std::chrono::seconds(startMotionDelay));
+    IOControl.lock();
+    std::cout<< "Train " << trainID << " pulled away.\n";
+    IOControl.unlock();
+    std::this_thread::sleep_for(std::chrono::seconds(travelTime));
+    IOControl.lock();
+    std::cout<< "Train " << trainID << " is approaching to the station.\n";
+    IOControl.unlock();
+    InTrainstation->StationOccupy(this);
+}
+
+char Train::getTrainLetter() {return trainID;}
+
 int main()
 {
-    Swimmer SWMarr[SWIMMERS_NUMBER];
-    for(int i = 0; i < SWIMMERS_NUMBER; i++) {
-     std::cout << "Enter name of swimmer number " << i+1 << ": ";
-     std::getline(std::cin, SWMarr[i].name);
-     do{
-        std::cout << "Enter speed of swimmer in m/s (range 1...2): ";
-        std::cin >> SWMarr[i].speed;
-     } while(SWMarr[i].speed < 1 || SWMarr[i].speed > 2);
-    }
-    std::thread THRarr[SWIMMERS_NUMBER];
-    for(int i = 0;i < SWIMMERS_NUMBER; i++) THRarr[i] = std::thread(swimTracker, i+1, SWMarr[i].name, SWMarr[i].speed);
-    for(int i = 0;i < SWIMMERS_NUMBER; i++) THRarr[i].join();
+    Station Trainstation;
+    Train* TrainArr[TRAINS_NUMBER];
+    std::thread THRarr[TRAINS_NUMBER];
+    for (int i = 0; i < TRAINS_NUMBER; ++i) { TrainArr[i] = new Train(i); }
+    for (int i = 0; i < TRAINS_NUMBER; ++i) { THRarr[i] = std::thread(&Train::trainMovement, TrainArr[i], &Trainstation); }
+#ifdef DEBUG
+    std::cout << "DEBUG: Threads launched\n";
+#endif
+    for(auto & i : THRarr) i.join();
+    for (auto & i : TrainArr) delete i;
     return 0;
 }
